@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.env
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Project specific
+api/truthstrike.db
+dashboard/data/
+extension/icons/*.png
+reports/
+exports/
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.bak
+
+# Node (if we add npm packages later)
+node_modules/
+package-lock.json
+
+# Sensitive
+config.local.js
+secrets.json
+.env.local

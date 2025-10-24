@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TruthStrike Command Center</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #2a5298;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: bold;
+            color: #1e3c72;
+            margin: 20px 0;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: width 1s ease;
+        }
+
+        .chart-container {
+            height: 200px;
+            margin-top: 20px;
+        }
+
+        .platform-list {
+            list-style: none;
+        }
+
+        .platform-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            margin: 5px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .platform-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .platform-count {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .recent-reports {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .report-item {
+            padding: 12px;
+            margin: 8px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #ff6348;
+        }
+
+        .report-url {
+            font-size: 12px;
+            color: #666;
+            word-break: break-all;
+        }
+
+        .report-time {
+            font-size: 11px;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        .money-trail-item {
+            padding: 16px;
+            margin: 10px 0;
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe8a1 100%);
+            border-radius: 12px;
+            border: 2px solid #ffc107;
+        }
+
+        .org-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .org-budget {
+            font-size: 24px;
+            color: #ff6348;
+            font-weight: bold;
+        }
+
+        .pattern-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .pattern-badge {
+            padding: 8px 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff4757 0%, #c44569 100%);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .wide-card {
+            grid-column: span 2;
+        }
+
+        .alert {
+            padding: 16px;
+            margin: 20px 0;
+            border-radius: 8px;
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            color: #004085;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .live-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #38ef7d;
+            border-radius: 50%;
+            margin-left: 10px;
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>⚔️ TruthStrike Command Center</h1>
+        <p>Real-time Counter-Propaganda Intelligence Dashboard <span class="live-indicator"></span></p>
+    </div>
+
+    <div class="dashboard">
+        <!-- Main Stats -->
+        <div class="card">
+            <div class="card-title">
+                <span>🎯</span>
+                Total Lies Caught
+            </div>
+            <div class="stat-number" id="total-lies">0</div>
+            <div class="stat-label">Disinformation Pieces Flagged</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <span>💰</span>
+                Money Exposed
+            </div>
+            <div class="stat-number" id="money-exposed">$0</div>
+            <div class="stat-label">Dark Money Traced</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <span>📊</span>
+                Reports Filed
+            </div>
+            <div class="stat-number" id="total-reports">0</div>
+            <div class="stat-label">User Reports Submitted</div>
+        </div>
+
+        <!-- Pattern Status -->
+        <div class="card wide-card">
+            <div class="card-title">
+                <span>🔍</span>
+                Active Detection Patterns
+            </div>
+            <div id="pattern-status" class="alert">
+                Loading pattern database...
+            </div>
+            <div class="pattern-grid" id="pattern-grid">
+                <!-- Patterns will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Platform Breakdown -->
+        <div class="card">
+            <div class="card-title">
+                <span>🌐</span>
+                Platform Breakdown
+            </div>
+            <ul class="platform-list" id="platform-list">
+                <li class="platform-item">
+                    <span class="platform-name">Twitter/X</span>
+                    <span class="platform-count">0</span>
+                </li>
+                <li class="platform-item">
+                    <span class="platform-name">Facebook</span>
+                    <span class="platform-count">0</span>
+                </li>
+                <li class="platform-item">
+                    <span class="platform-name">Reddit</span>
+                    <span class="platform-count">0</span>
+                </li>
+                <li class="platform-item">
+                    <span class="platform-name">Truth Social</span>
+                    <span class="platform-count">0</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Recent Reports -->
+        <div class="card">
+            <div class="card-title">
+                <span>🚨</span>
+                Recent Reports
+            </div>
+            <div class="recent-reports" id="recent-reports">
+                <div class="report-item">
+                    <div class="report-url">Waiting for reports...</div>
+                    <div class="report-time">No activity yet</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Money Trails -->
+        <div class="card wide-card">
+            <div class="card-title">
+                <span>💸</span>
+                Top Funding Sources
+            </div>
+            <div id="money-trails">
+                <div class="money-trail-item">
+                    <div class="org-name">Heritage Foundation</div>
+                    <div class="org-budget">$86 Million/Year</div>
+                    <div>40% Dark Money | Project 2025</div>
+                </div>
+                <div class="money-trail-item">
+                    <div class="org-name">Koch Industries</div>
+                    <div class="org-budget">$400+ Million/Year</div>
+                    <div>Climate Denial | Union Busting</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Control Panel -->
+        <div class="card wide-card">
+            <div class="card-title">
+                <span>⚙️</span>
+                Control Panel
+            </div>
+            <div class="action-buttons">
+                <button class="btn" onclick="refreshStats()">
+                    🔄 Refresh Stats
+                </button>
+                <button class="btn btn-success" onclick="updatePatterns()">
+                    📥 Update Patterns
+                </button>
+                <button class="btn" onclick="exportData()">
+                    📤 Export Data
+                </button>
+                <button class="btn btn-danger" onclick="clearReports()">
+                    🗑️ Clear Reports
+                </button>
+            </div>
+            <div id="api-status" class="alert" style="margin-top: 20px;">
+                API Status: Checking...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000';
+
+        // Auto-refresh every 30 seconds
+        setInterval(refreshStats, 30000);
+
+        // Initial load
+        refreshStats();
+
+        async function refreshStats() {
+            try {
+                // Get stats from API
+                const response = await fetch(`${API_URL}/api/stats`);
+                if (!response.ok) throw new Error('API unavailable');
+
+                const stats = await response.json();
+
+                // Update UI
+                document.getElementById('total-lies').textContent = stats.total_reports || 0;
+                document.getElementById('total-reports').textContent = stats.total_reports || 0;
+
+                // Update platform breakdown
+                if (stats.by_platform) {
+                    const platformList = document.getElementById('platform-list');
+                    platformList.innerHTML = '';
+                    Object.entries(stats.by_platform).forEach(([platform, count]) => {
+                        const item = document.createElement('li');
+                        item.className = 'platform-item';
+                        item.innerHTML = `
+                            <span class="platform-name">${platform || 'Unknown'}</span>
+                            <span class="platform-count">${count}</span>
+                        `;
+                        platformList.appendChild(item);
+                    });
+                }
+
+                // Update recent reports
+                if (stats.recent_reports && stats.recent_reports.length > 0) {
+                    const recentReports = document.getElementById('recent-reports');
+                    recentReports.innerHTML = '';
+                    stats.recent_reports.slice(0, 10).forEach(report => {
+                        const item = document.createElement('div');
+                        item.className = 'report-item';
+                        item.innerHTML = `
+                            <div class="report-url">${report.url || 'Unknown URL'}</div>
+                            <div class="report-time">${report.platform || 'Unknown'} - ${timeAgo(report.timestamp)}</div>
+                        `;
+                        recentReports.appendChild(item);
+                    });
+                }
+
+                // Update pattern count
+                document.getElementById('pattern-status').innerHTML = `
+                    <strong>${stats.total_patterns || 0}</strong> active patterns loaded
+                    <br>Last updated: ${new Date().toLocaleTimeString()}
+                `;
+
+                // Update API status
+                document.getElementById('api-status').innerHTML = `
+                    API Status: <strong style="color: green;">Connected</strong>
+                    <br>Server: ${API_URL}
+                `;
+
+                // Load patterns
+                await loadPatterns();
+
+            } catch (error) {
+                console.error('Error loading stats:', error);
+                document.getElementById('api-status').innerHTML = `
+                    API Status: <strong style="color: red;">Disconnected</strong>
+                    <br>Make sure server.py is running
+                `;
+            }
+        }
+
+        async function loadPatterns() {
+            try {
+                const response = await fetch(`${API_URL}/api/patterns`);
+                const data = await response.json();
+
+                const grid = document.getElementById('pattern-grid');
+                grid.innerHTML = '';
+
+                Object.keys(data.patterns).forEach(category => {
+                    const badge = document.createElement('div');
+                    badge.className = 'pattern-badge';
+                    badge.textContent = category.replace('_', ' ').toUpperCase();
+                    grid.appendChild(badge);
+                });
+            } catch (error) {
+                console.error('Error loading patterns:', error);
+            }
+        }
+
+        async function updatePatterns() {
+            alert('Patterns will be updated on next extension reload');
+            // In production, this would trigger extension update
+        }
+
+        async function exportData() {
+            try {
+                const response = await fetch(`${API_URL}/api/stats`);
+                const stats = await response.json();
+
+                const dataStr = JSON.stringify(stats, null, 2);
+                const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                const url = URL.createObjectURL(dataBlob);
+
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `truthstrike-data-${Date.now()}.json`;
+                a.click();
+            } catch (error) {
+                alert('Error exporting data');
+            }
+        }
+
+        async function clearReports() {
+            if (confirm('Clear all reports? This cannot be undone.')) {
+                // In production, this would clear the database
+                alert('Reports cleared (demo mode - no actual deletion)');
+            }
+        }
+
+        function timeAgo(timestamp) {
+            const date = new Date(timestamp);
+            const seconds = Math.floor((new Date() - date) / 1000);
+            if (seconds < 60) return 'just now';
+            if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+            if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+            return `${Math.floor(seconds / 86400)}d ago`;
+        }
+    </script>
+</body>
+</html>

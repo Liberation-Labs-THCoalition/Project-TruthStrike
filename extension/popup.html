@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      width: 380px;
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .header {
+      padding: 20px;
+      color: white;
+      text-align: center;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 5px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .tagline {
+      font-size: 12px;
+      opacity: 0.9;
+      font-style: italic;
+    }
+
+    .stats {
+      background: white;
+      padding: 15px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 24px;
+      font-weight: bold;
+      color: #764ba2;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .content {
+      background: white;
+      padding: 20px;
+    }
+
+    .section {
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .quick-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .action-btn {
+      padding: 12px 16px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .action-btn:hover {
+      transform: translateX(4px);
+      box-shadow: -4px 4px 8px rgba(102, 126, 234, 0.3);
+    }
+
+    .action-btn.secondary {
+      background: linear-gradient(135deg, #f093fb, #f5576c);
+    }
+
+    .action-btn.tertiary {
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+    }
+
+    .toggle-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+
+    .toggle-label {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .toggle {
+      position: relative;
+      width: 50px;
+      height: 26px;
+    }
+
+    .toggle input {
+      display: none;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 34px;
+    }
+
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .toggle-slider {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+
+    input:checked + .toggle-slider:before {
+      transform: translateX(24px);
+    }
+
+    .recent-catches {
+      max-height: 150px;
+      overflow-y: auto;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      font-size: 12px;
+    }
+
+    .catch-item {
+      padding: 8px;
+      margin-bottom: 8px;
+      background: white;
+      border-radius: 6px;
+      border-left: 3px solid #764ba2;
+    }
+
+    .catch-type {
+      font-weight: 600;
+      color: #764ba2;
+      text-transform: uppercase;
+      font-size: 10px;
+    }
+
+    .catch-site {
+      color: #666;
+      margin-top: 4px;
+    }
+
+    .footer {
+      padding: 15px;
+      background: #f8f9fa;
+      text-align: center;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .footer-link {
+      color: #764ba2;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .footer-link:hover {
+      text-decoration: underline;
+    }
+
+    .icon {
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">⚔️ TruthStrike</div>
+    <div class="tagline">Counter-Propaganda Engine v1.0</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-number" id="lies-caught">0</div>
+      <div class="stat-label">Lies Caught</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number" id="money-exposed">$0</div>
+      <div class="stat-label">Money Exposed</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number" id="reports-sent">0</div>
+      <div class="stat-label">Reports Sent</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">🎯</span>
+        Quick Actions
+      </div>
+      <div class="quick-actions">
+        <button class="action-btn" id="scan-page">
+          <span>🔍</span>
+          Scan Current Page
+        </button>
+        <button class="action-btn secondary" id="view-money-trails">
+          <span>💰</span>
+          View Money Trails Database
+        </button>
+        <button class="action-btn tertiary" id="report-dashboard">
+          <span>📊</span>
+          Open Report Dashboard
+        </button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">⚙️</span>
+        Settings
+      </div>
+      <div class="toggle-section">
+        <span class="toggle-label">Auto-scan pages</span>
+        <label class="toggle">
+          <input type="checkbox" id="auto-scan" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">🎯</span>
+        Recent Catches
+      </div>
+      <div class="recent-catches" id="recent-catches">
+        <div class="catch-item">
+          <div class="catch-type">Starting up...</div>
+          <div class="catch-site">Ready to detect disinformation</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <a href="https://thcoalition.net" target="_blank" class="footer-link">
+      Part of the Coalition's Counter-Infrastructure
+    </a>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
