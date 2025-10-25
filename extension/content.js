@@ -43,11 +43,15 @@ class TruthStrike {
 
     this.knownDisinfoPatterns.set('climate_denial', {
       patterns: [
-        /climate\s+hoax/gi,
-        /global\s+warming\s+scam/gi,
-        /co2\s+is\s+plant\s+food/gi,
-        /solar\s+panels.*toxic/gi,
-        /wind\s+turbines.*kill.*birds/gi
+        /climate\s+(hoax|scam|fraud|lie)/gi,
+        /global\s+warming\s+(hoax|scam|fraud|lie|is\s+a\s+hoax)/gi,
+        /climate\s+change\s+(hoax|scam|fraud|lie|is\s+a\s+hoax)/gi,
+        /co2\s+is\s+(just\s+)?plant\s+food/gi,
+        /solar\s+panels.{0,30}(toxic|waste|harmful)/gi,
+        /wind\s+turbines.{0,30}kill.{0,20}birds/gi,
+        /climate\s+alarmis/gi,
+        /warming\s+pause/gi,
+        /climate\s+cult/gi
       ],
       severity: 'high',
       category: 'climate',
@@ -79,11 +83,15 @@ class TruthStrike {
 
     this.knownDisinfoPatterns.set('trans_panic', {
       patterns: [
-        /groomer/gi,
-        /trans.*agenda/gi,
-        /biological\s+man/gi,
-        /mutilat.*children/gi,
-        /drag.*groom/gi
+        /\b(trans|lgbt|gay|drag)\b.{0,50}\b(groomer|groom(ing)?)\b/gi,
+        /\b(groomer|groom(ing)?)\b.{0,50}\b(trans|lgbt|gay|drag)\b/gi,
+        /trans(gender)?\s+(agenda|ideology|cult)/gi,
+        /biological\s+(man|male|woman|female)\b.{0,50}\b(bathroom|sport|locker)/gi,
+        /\b(bathroom|sport|locker)\b.{0,50}\bbiological\s+(man|male|woman|female)/gi,
+        /mutilat(e|ing|ion).{0,30}\b(children|kids|minors)/gi,
+        /\b(children|kids|minors)\b.{0,30}mutilat(e|ing|ion)/gi,
+        /woke\s+(gender|trans|lgbt)/gi,
+        /parental\s+rights.{0,50}\b(trans|gender|lgbt)/gi
       ],
       severity: 'high',
       category: 'civil_rights',
@@ -174,21 +182,48 @@ class TruthStrike {
     const text = element.textContent || '';
     if (text.length < 20) return; // Skip short text
 
+    // Skip overly large elements (likely parent containers)
+    // Only flag reasonably-sized content blocks
+    if (text.length > 10000) {
+      // Instead, scan children
+      element.querySelectorAll('article, section, div, p').forEach(child => {
+        if (child !== element && !child.dataset.truthstrikeProcessed) {
+          this.scanElement(child);
+        }
+      });
+      return;
+    }
+
     // Check against all patterns
     for (const [key, disinfo] of this.knownDisinfoPatterns) {
       for (const pattern of disinfo.patterns) {
-        if (pattern.test(text)) {
-          this.flagContent(element, key, disinfo);
-          break;
+        try {
+          if (pattern.test(text)) {
+            console.log(`[TruthStrike] Detected ${key} in element:`, element.tagName, text.substring(0, 100));
+            this.flagContent(element, key, disinfo);
+            return; // Stop checking once we find a match
+          }
+        } catch (error) {
+          console.error(`[TruthStrike] Pattern test failed for ${key}:`, error, pattern);
         }
       }
     }
   }
 
-  flagContent(element, type, disinfo) {
-    // Don't double-flag
+  async flagContent(element, type, disinfo) {
+    // Don't double-flag or double-count
     if (element.dataset.truthstrikeProcessed) return;
     element.dataset.truthstrikeProcessed = 'true';
+
+    // Also mark all parent elements to prevent duplicate counting
+    let parent = element.parentElement;
+    while (parent && parent !== document.body) {
+      parent.dataset.truthstrikeProcessed = 'true';
+      parent = parent.parentElement;
+    }
+
+    // Update stats (only once per element)
+    await this.updateStats(type, disinfo);
 
     // Create warning wrapper
     const wrapper = document.createElement('div');
@@ -253,6 +288,13 @@ class TruthStrike {
       action: 'show_money_trail',
       type: type,
       funders: this.knownDisinfoPatterns.get(type).funders
+    }, (response) => {
+      if (chrome.runtime.lastError) {
+        console.error('[TruthStrike] Money trail message error:', chrome.runtime.lastError);
+        this.showNotification('❌ Failed to open money trail');
+      } else {
+        console.log('[TruthStrike] Money trail opened:', response);
+      }
     });
   }
 
@@ -261,21 +303,45 @@ class TruthStrike {
     chrome.runtime.sendMessage({
       action: 'show_debunk',
       type: type
+    }, (response) => {
+      if (chrome.runtime.lastError) {
+        console.error('[TruthStrike] Debunk message error:', chrome.runtime.lastError);
+        this.showNotification('❌ Failed to open debunk');
+      } else {
+        console.log('[TruthStrike] Debunk opened:', response);
+      }
     });
   }
 
   shareCounterNarrative(type) {
     const disinfo = this.knownDisinfoPatterns.get(type);
-    const text = `FACT CHECK: ${disinfo.counterPoints[0]} Learn more: https://thcoalition.net/truthstrike`;
 
-    // Copy to clipboard
-    navigator.clipboard.writeText(text);
+    // Map each disinformation type to authoritative sources
+    const sources = {
+      'election_fraud': 'https://www.cisa.gov/news-events/news/joint-statement-elections-infrastructure-government-coordinating-council-election',
+      'climate_denial': 'https://climate.nasa.gov/evidence/',
+      'vaccine_misinfo': 'https://www.cdc.gov/coronavirus/2019-ncov/vaccines/facts.html',
+      'trans_panic': 'https://www.ama-assn.org/health-care-advocacy/advocacy-update/march-26-2021-state-advocacy-update',
+      'soros_conspiracy': 'https://www.adl.org/resources/blog/george-soros-and-anti-semitism-conspiracy-theories',
+      'crt_panic': 'https://www.americanbar.org/groups/crsj/publications/human_rights_magazine_home/civil-rights-reimagining-policing/a-lesson-on-critical-race-theory/',
+      'welfare_myths': 'https://www.cbpp.org/research/food-assistance/snap-is-linked-with-improved-health-outcomes-and-lower-health-care-costs'
+    };
 
-    // Show notification
-    this.showNotification('Counter-narrative copied to clipboard!');
+    const sourceUrl = sources[type] || 'https://www.factcheck.org/';
+    const text = `FACT CHECK: ${disinfo.counterPoints[0]}\n\nSource: ${sourceUrl}`;
+
+    // Copy to clipboard with error handling
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        this.showNotification('✅ Counter-narrative copied to clipboard!');
+      })
+      .catch((error) => {
+        console.error('Clipboard write failed:', error);
+        this.showNotification('❌ Clipboard copy failed. Please copy manually.');
+      });
   }
 
-  reportContent(element) {
+  async reportContent(element) {
     // Log to our database (would connect to Coalition API)
     const report = {
       url: window.location.href,
@@ -287,9 +353,22 @@ class TruthStrike {
     chrome.runtime.sendMessage({
       action: 'report_content',
       data: report
-    });
+    }, async (response) => {
+      if (chrome.runtime.lastError) {
+        console.error('[TruthStrike] Report message error:', chrome.runtime.lastError);
+        this.showNotification('❌ Failed to send report');
+      } else {
+        console.log('[TruthStrike] Report sent:', response);
 
-    this.showNotification('Content reported to Coalition database');
+        // Update report count
+        const data = await chrome.storage.local.get(['totalReports']);
+        await chrome.storage.local.set({
+          totalReports: (data.totalReports || 0) + 1
+        });
+
+        this.showNotification('✅ Content reported to Coalition database');
+      }
+    });
   }
 
   detectPlatform() {
@@ -315,6 +394,36 @@ class TruthStrike {
     }, 3000);
   }
 
+  async updateStats(type, disinfo) {
+    // Get current stats
+    const data = await chrome.storage.local.get(['totalLiesCaught', 'totalMoneyExposed', 'totalReports', 'recentCatches']);
+
+    // Increment lies caught
+    const totalLiesCaught = (data.totalLiesCaught || 0) + 1;
+
+    // Add money exposed (estimate based on funders)
+    const moneyPerFunder = 50000000; // $50M average
+    const totalMoneyExposed = (data.totalMoneyExposed || 0) + (disinfo.funders.length * moneyPerFunder);
+
+    // Add to recent catches
+    const recentCatches = data.recentCatches || [];
+    recentCatches.unshift({
+      type: disinfo.category.replace('_', ' ').toUpperCase(),
+      site: this.detectPlatform(),
+      timestamp: Date.now()
+    });
+
+    // Keep only last 20
+    const trimmedCatches = recentCatches.slice(0, 20);
+
+    // Save to storage
+    await chrome.storage.local.set({
+      totalLiesCaught: totalLiesCaught,
+      totalMoneyExposed: totalMoneyExposed,
+      recentCatches: trimmedCatches
+    });
+  }
+
   handleMessage(request, sender, sendResponse) {
     if (request.action === 'scan_page') {
       this.scanElement(document.body);
@@ -324,8 +433,21 @@ class TruthStrike {
 }
 
 // Initialize TruthStrike when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => new TruthStrike());
-} else {
-  new TruthStrike();
+console.log('TruthStrike content script loaded!');
+console.log('Document ready state:', document.readyState);
+
+try {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('DOM loaded, initializing TruthStrike...');
+      window.truthstrike = new TruthStrike();
+      console.log('TruthStrike initialized!');
+    });
+  } else {
+    console.log('DOM already loaded, initializing TruthStrike...');
+    window.truthstrike = new TruthStrike();
+    console.log('TruthStrike initialized!');
+  }
+} catch (error) {
+  console.error('TruthStrike initialization failed:', error);
 }

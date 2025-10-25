@@ -202,27 +202,41 @@ class TruthStrikeCommand {
   }
 
   async handleMessage(request, sender, sendResponse) {
-    switch(request.action) {
-      case 'show_money_trail':
-        await this.showMoneyTrail(request.type, request.funders);
-        break;
+    // Return true immediately to keep message channel open
+    (async () => {
+      try {
+        switch(request.action) {
+          case 'show_money_trail':
+            await this.showMoneyTrail(request.type, request.funders);
+            sendResponse({success: true});
+            break;
 
-      case 'show_debunk':
-        await this.showDebunk(request.type);
-        break;
+          case 'show_debunk':
+            await this.showDebunk(request.type);
+            sendResponse({success: true});
+            break;
 
-      case 'report_content':
-        await this.reportContent(request.data);
-        break;
+          case 'report_content':
+            await this.reportContent(request.data);
+            sendResponse({success: true});
+            break;
 
-      case 'get_stats':
-        sendResponse({
-          reported: this.reportedContent.length,
-          trails: this.moneyTrails.size,
-          debunks: this.debunkDatabase.size
-        });
-        break;
-    }
+          case 'get_stats':
+            sendResponse({
+              reported: this.reportedContent.length,
+              trails: this.moneyTrails.size,
+              debunks: this.debunkDatabase.size
+            });
+            break;
+
+          default:
+            sendResponse({error: 'Unknown action'});
+        }
+      } catch (error) {
+        console.error('TruthStrike background error:', error);
+        sendResponse({error: error.message});
+      }
+    })();
 
     return true; // Keep message channel open for async response
   }
