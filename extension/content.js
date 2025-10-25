@@ -65,11 +65,13 @@ class TruthStrike {
 
     this.knownDisinfoPatterns.set('vaccine_misinfo', {
       patterns: [
-        /vaccine.*population\s+control/gi,
-        /mrna.*alter.*dna/gi,
-        /vaccine.*5g/gi,
-        /died\s+suddenly/gi,
-        /pure\s+blood/gi
+        /vaccine.{0,30}population\s+control/gi,
+        /mrna.{0,30}alter.{0,20}dna/gi,
+        /vaccine.{0,30}5g/gi,
+        /\b(vaccine|vax|jab)\b.{0,50}died\s+suddenly/gi,
+        /died\s+suddenly.{0,50}\b(vaccine|vax|jab)\b/gi,
+        /pure\s+blood/gi,
+        /vaccine.{0,30}(microchip|tracking|mark\s+of\s+the\s+beast)/gi
       ],
       severity: 'critical',
       category: 'public_health',
@@ -153,25 +155,53 @@ class TruthStrike {
         'Food assistance has highest economic multiplier effect'
       ]
     });
+
+    this.knownDisinfoPatterns.set('immigration_fearmongering', {
+      patterns: [
+        /(great|white)\s+replacement/gi,
+        /\b(invad|invasi)\w*\b.{0,50}\b(immigrant|migrant|border)/gi,
+        /\b(immigrant|migrant|border)\b.{0,50}\b(invad|invasi)\w*/gi,
+        /illegal\s+alien/gi,
+        /open\s+borders.{0,30}(destroy|ruin|end)/gi,
+        /migrant.{0,30}(crime|caravan|horde)/gi,
+        /replacing.{0,30}(american|white)\s+(worker|voter)/gi
+      ],
+      severity: 'high',
+      category: 'xenophobia',
+      funders: ['Federation for American Immigration Reform', 'Center for Immigration Studies', 'NumbersUSA'],
+      counterPoints: [
+        'Immigrants commit crimes at lower rates than native-born citizens',
+        'Undocumented immigrants pay $11.7 billion in taxes annually',
+        '"Great Replacement" is white supremacist conspiracy theory'
+      ]
+    });
   }
 
   observeContent() {
     // Monitor for new content (infinite scroll, dynamic loading)
     const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        mutation.addedNodes.forEach((node) => {
-          if (node.nodeType === 1) { // Element node
-            this.scanElement(node);
-          }
+      try {
+        mutations.forEach((mutation) => {
+          mutation.addedNodes.forEach((node) => {
+            if (node.nodeType === 1) { // Element node
+              this.scanElement(node);
+            }
+          });
         });
-      });
+      } catch (error) {
+        console.error('[TruthStrike] MutationObserver error:', error);
+      }
     });
 
     // Start observing
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true
-    });
+    try {
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+    } catch (error) {
+      console.error('[TruthStrike] Failed to start observer:', error);
+    }
 
     // Initial scan
     this.scanElement(document.body);
@@ -324,7 +354,8 @@ class TruthStrike {
       'trans_panic': 'https://www.ama-assn.org/health-care-advocacy/advocacy-update/march-26-2021-state-advocacy-update',
       'soros_conspiracy': 'https://www.adl.org/resources/blog/george-soros-and-anti-semitism-conspiracy-theories',
       'crt_panic': 'https://www.americanbar.org/groups/crsj/publications/human_rights_magazine_home/civil-rights-reimagining-policing/a-lesson-on-critical-race-theory/',
-      'welfare_myths': 'https://www.cbpp.org/research/food-assistance/snap-is-linked-with-improved-health-outcomes-and-lower-health-care-costs'
+      'welfare_myths': 'https://www.cbpp.org/research/food-assistance/snap-is-linked-with-improved-health-outcomes-and-lower-health-care-costs',
+      'immigration_fearmongering': 'https://www.americanimmigrationcouncil.org/research/the-cost-of-immigration-enforcement-and-border-security'
     };
 
     const sourceUrl = sources[type] || 'https://www.factcheck.org/';
