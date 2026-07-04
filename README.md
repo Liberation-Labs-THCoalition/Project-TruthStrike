@@ -1,201 +1,86 @@
-# 🎯 TruthStrike: Counter-Propaganda Browser Extension
+# ⚡ TruthStrike 2.0
 
-**Real-time disinformation detection and counter-narrative deployment**
+**Local-first manipulation detection for your browser.**
+Scores the rhetorical machinery of what you read, shows who owns the outlet
+and who funds the narrative, and arms you with sourced counter-speech.
+Nothing you read ever leaves your device.
 
-Part of the Coalition's digital resistance infrastructure. TruthStrike automatically detects disinformation as you browse and exposes the money and power behind the lies.
+Built for community organizers and local journalists. No account, no cloud,
+no telemetry, no build step — the code you can read is the code that runs.
 
-## 🚀 Features
+## What it does
 
-- **Real-Time Detection**: Scans social media posts, news articles, and comments for known disinformation patterns
-- **Money Trail Exposure**: Shows who funds the propaganda (Koch, Heritage Foundation, ALEC, etc.)
-- **Instant Counter-Narratives**: Provides fact-based rebuttals you can copy and share
-- **Cross-Platform**: Works on Twitter/X, Facebook, Reddit, Truth Social, and major news sites
-- **Report & Track**: Builds a database of disinformation spread patterns
+- **Detects manipulation *technique*, not topics.** Eighteen detectors —
+  fear appeals, consensus faking, menace metaphors, phantom "experts say"
+  attribution, naked statistics, stakes inflation — organized under the
+  threat/social/reward pathway model from the Oracle Loop deception research.
+  A fact-check quoting a lie scores ~0. A lie scores like a lie, even if
+  nobody's seen that particular lie before.
+- **Scores a spectrum, never a verdict.** 0–100 Manipulation Index with
+  confidence, per-pathway breakdown, and plain-language explanations of every
+  matched technique. Annotates; never hides or dims content.
+- **Follow the Money.** Who owns this outlet (48-domain database with
+  receipts links), who funds this narrative (22 influence orgs), and live
+  IRS 990 / FEC lookups — fired only when you click, queried only with
+  public org names.
+- **Counter-narratives with receipts.** Topic-agnostic technique counters,
+  sourced rebuttals for known narrative families, optional local-LLM
+  drafting, one-click share (you always review first).
+- **Coordination detection.** Fingerprints high-scoring narratives locally
+  and shows you when the same talking points hit 3+ different domains within
+  72 hours of each other in your browsing — with a cascade timeline.
+- **Learns from you.** 👍/👎 on flags recalibrates technique weights
+  on-device. Your calibration is yours; it never syncs anywhere.
 
-## 📦 Installation
+## Install (2 minutes)
 
-### Quick Install (Chrome/Brave/Edge)
+**Chrome / Brave / Edge:** `chrome://extensions` → enable *Developer mode* →
+*Load unpacked* → select the `extension/` folder.
 
-1. Download the extension folder to your computer
-2. Open Chrome and navigate to `chrome://extensions/`
-3. Enable "Developer mode" (toggle in top right)
-4. Click "Load unpacked"
-5. Select the `PROJECT_TRUTHSTRIKE/extension` folder
-6. The TruthStrike icon will appear in your toolbar
+**Firefox:** `about:debugging` → *This Firefox* → *Load Temporary Add-on* →
+pick any file in `extension/`.
 
-### Firefox Installation
+**Optional local model (sharper analysis + drafted counter-speech):**
+install [Ollama](https://ollama.com), then `ollama pull qwen2.5:1.5b-instruct`
+(~1 GB). TruthStrike finds it automatically. Chrome's built-in on-device
+model is used if present. There is no cloud option — by design.
 
-1. Open Firefox and navigate to `about:debugging`
-2. Click "This Firefox"
-3. Click "Load Temporary Add-on"
-4. Select any file in the `extension` folder
-5. Extension will load (note: temporary in Firefox unless signed)
+## Verify it yourself
 
-## 🎮 How to Use
-
-### Automatic Mode (Default)
-TruthStrike runs automatically on supported sites. When disinformation is detected:
-- Content gets flagged with a red border
-- Warning box appears with facts and funding info
-- Click action buttons to debunk, share facts, or investigate
-
-### Manual Scan
-1. Click the TruthStrike icon in your toolbar
-2. Click "Scan Current Page"
-3. All disinformation on the page will be highlighted
-
-### Following the Money
-When you see "Who profits from this lie", click "Follow the Money" to see:
-- Organization funding details
-- Dark money connections
-- Corporate sponsors
-- Political spending
-- Environmental/social damage
-
-## 🎯 What It Detects
-
-### Current Detection Categories
-
-**Election Integrity**
-- "Stolen election" claims
-- Dominion voting conspiracy theories
-- Dead voter myths
-- 2000 Mules propaganda
-
-**Climate Denial**
-- "Climate hoax" narratives
-- CO2 minimization
-- Renewable energy attacks
-- Fossil fuel greenwashing
-
-**Public Health**
-- Vaccine conspiracy theories
-- COVID denialism
-- Anti-science propaganda
-- "Population control" myths
-
-**Civil Rights**
-- Anti-trans panic
-- "Groomer" slurs
-- CRT fearmongering
-- Immigration myths
-
-**Economic Justice**
-- "Welfare queen" tropes
-- Anti-union propaganda
-- Trickle-down myths
-- Corporate welfare hiding
-
-## 🛠️ Customization
-
-### Adding New Detection Patterns
-
-Edit `content.js` and add to the `knownDisinfoPatterns` map:
-
-```javascript
-this.knownDisinfoPatterns.set('new_category', {
-  patterns: [
-    /pattern_to_detect/gi,
-    /another_pattern/gi
-  ],
-  severity: 'high', // critical, high, medium
-  category: 'category_name',
-  funders: ['Organization 1', 'Organization 2'],
-  counterPoints: [
-    'Fact-based rebuttal 1',
-    'Fact-based rebuttal 2'
-  ]
-});
+```bash
+node tests/run_tests.cjs        # 16 checks: detection, calibration, money,
+                                # counter, coordination — all offline
+grep -rn "fetch(" extension/    # audit the complete network surface
 ```
 
-### Styling
+## Project layout
 
-Modify `truthstrike.css` to change the appearance of warnings and notifications.
+| Path | What |
+|---|---|
+| `extension/analysis/` | The detection engine (plain JS, zero dependencies, importable in Node) |
+| `extension/data/` | Ownership, influence-org, and counter-narrative databases (plain JSON, PRs welcome) |
+| `server/` | Optional self-hostable community relay (annotations, verified reporters, DP trend stats) |
+| `docs/` | Privacy architecture, Oracle research integration, community & cross-platform design |
+| `FABLE_REBUILD.md` | Full architecture, status, and deployment plan |
+| `legacy/` | v1 (October 2025), preserved |
 
-## 🔒 Privacy & Security
+## Contributing
 
-- **No tracking**: TruthStrike doesn't track your browsing
-- **Local processing**: Detection happens on your device
-- **Optional reporting**: You control what gets reported
-- **Open source**: Fully auditable code
+- **Data PRs** are the easiest high-impact contribution: ownership entries,
+  org receipts, counter-narrative sources. Every claim needs a public link.
+- **Lexicon PRs**: new technique cues — machinery only, never topic words
+  (that rule is load-bearing; see `extension/analysis/lexicons.js`).
+- **Languages**: the taxonomy is language-agnostic; the cues are English.
+  A `lexicons.<lang>.js` is a self-contained contribution.
+- **False positives/negatives**: open an issue with the text and the score
+  from the "Why flagged" panel.
 
-## 🤝 Contributing
+## License
 
-### Report False Positives/Negatives
-Open an issue with:
-- URL where issue occurred
-- Screenshot if possible
-- Text that was incorrectly flagged (or missed)
-
-### Add Detection Patterns
-1. Research the disinformation narrative
-2. Identify funding sources
-3. Compile fact-based rebuttals with sources
-4. Submit pull request with new pattern
-
-### Improve Counter-Narratives
-Help make rebuttals more effective:
-- Keep them short and factual
-- Include credible sources
-- Focus on the money trail
-- Make them shareable
-
-## 🚨 Troubleshooting
-
-### Extension Not Working
-1. Check that developer mode is enabled
-2. Reload the extension
-3. Refresh the target page
-4. Check browser console for errors (F12)
-
-### False Positives
-- Right-click flagged content
-- Select "Report False Positive"
-- We'll update patterns in next version
-
-### Performance Issues
-- Disable auto-scan for specific sites
-- Reduce scan frequency in settings
-- Report sites causing issues
-
-## 📊 Impact Metrics
-
-Since launch, TruthStrike has:
-- Detected [X] pieces of disinformation
-- Exposed $[X] in dark money funding
-- Generated [X] counter-narratives
-- Built database of [X] propaganda sources
-
-## 🔗 Resources
-
-- **Coalition Website**: https://thcoalition.net
-- **Report Issues**: https://github.com/thcoalition/truthstrike/issues
-- **Fact-Check Sources**:
-  - https://www.factcheck.org/
-  - https://www.snopes.com/
-  - https://www.politifact.com/
-- **Money Trail Databases**:
-  - https://www.opensecrets.org/
-  - https://www.sourcewatch.org/
-  - https://littlesis.org/
-
-## 📜 License
-
-Creative Commons CC-BY-SA 4.0
-Free to use, modify, and distribute with attribution
-
-## 🔥 Call to Action
-
-**The fascists have better funding. We have better code.**
-
-Every install is a small act of resistance. Every flagged lie is a truth saved. Every exposed money trail is power revealed.
-
-Install TruthStrike. Share with friends. Fight back.
+CC-BY-SA 4.0. Use it, fork it, ship it — keep it open.
 
 ---
 
 *"In a time of universal deceit, telling the truth is a revolutionary act."*
 
-Built with rage and determination by the Transparent Humboldt Coalition
-
-**Solidarity forever.**
+Built by the Transparent Humboldt Coalition. **Solidarity forever.**
