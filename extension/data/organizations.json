@@ -1,0 +1,146 @@
+{
+  "_meta": {
+    "description": "Influence-network organizations frequently behind coordinated narratives. Every entry links to primary-source receipts (990 filings, court records, investigative databases). Scale figures are approximate annual revenue from public 990s and dated. This file documents; the receipts prove.",
+    "as_of": "2025",
+    "dark_money_note": "'Dark money' here means 501(c) entities that spend on politics without disclosing donors, and the donor-advised funds (DonorsTrust et al.) that anonymize the money upstream."
+  },
+  "organizations": {
+    "Heritage Foundation": {
+      "type": "501(c)(3) think tank",
+      "scale": "~$100M/yr",
+      "focus": "Policy architecture for the movement right; author of Project 2025.",
+      "funding": "Bradley Foundation, Scaife funds, DonorsTrust conduit, corporate donors.",
+      "receipts": ["https://projects.propublica.org/nonprofits/search?q=heritage+foundation", "https://www.desmog.com/heritage-foundation/", "https://littlesis.org/org/13221-Heritage_Foundation"]
+    },
+    "ALEC": {
+      "type": "501(c)(3) corporate-legislator bill mill",
+      "scale": "~$10M/yr",
+      "focus": "Model legislation copy-pasted into state law; corporations vote on drafts alongside legislators.",
+      "funding": "Corporate members and conservative foundations; membership lists partially exposed by leaks.",
+      "receipts": ["https://projects.propublica.org/nonprofits/search?q=american+legislative+exchange", "https://www.exposedbycmd.org/alec/"]
+    },
+    "Alliance Defending Freedom": {
+      "type": "501(c)(3) legal advocacy",
+      "scale": "~$100M/yr",
+      "focus": "Anti-LGBTQ and anti-abortion litigation; behind many state-level trans healthcare bans.",
+      "funding": "Large anonymous gifts via National Christian Foundation and DonorsTrust.",
+      "receipts": ["https://projects.propublica.org/nonprofits/search?q=alliance+defending+freedom", "https://www.splcenter.org/fighting-hate/extremist-files/group/alliance-defending-freedom"]
+    },
+    "Family Research Council": {
+      "type": "501(c)(3), reclassified as 'association of churches' (2020) — exempting it from filing public 990s",
+      "scale": "~$15-20M/yr (last public filings)",
+      "focus": "Anti-LGBTQ policy and messaging.",
+      "receipts": ["https://projects.propublica.org/nonprofits/search?q=family+research+council", "https://www.splcenter.org/fighting-hate/extremist-files/group/family-research-council"]
+    },
+    "Heartland Institute": {
+      "type": "501(c)(3) think tank",
+      "scale": "~$5M/yr",
+      "focus": "Climate denial's institutional home; historically tobacco-doubt as well.",
+      "funding": "Historically ExxonMobil and Koch funds; now heavily DonorsTrust-anonymized.",
+      "receipts": ["https://www.desmog.com/heartland-institute/", "https://projects.propublica.org/nonprofits/search?q=heartland+institute"]
+    },
+    "Manhattan Institute": {
+      "type": "501(c)(3) think tank",
+      "scale": "~$20M/yr",
+      "focus": "Home of the engineered CRT panic (Christopher Rufo, who described the strategy on the record: 'decodify the term and recodify it').",
+      "receipts": ["https://projects.propublica.org/nonprofits/search?q=manhattan+institute", "https://www.desmog.com/manhattan-institute/"]
+    },
+    "Claremont Institute": {
+      "type": "501(c)(3) think tank",
+      "scale": "~$7M/yr",
+      "focus": "Intellectual scaffolding for election-denial ('John Eastman memos') and post-liberal politics.",
+      "receipts": ["https://projects.propublica.org/nonprofits/search?q=claremont+institute"]
+    },
+    "Turning Point USA": {
+      "type": "501(c)(3) + affiliated (c)(4) and PAC",
+      "scale": "~$80M+/yr network",
+      "focus": "Campus and youth narrative distribution; enormous social media amplification apparatus.",
+      "receipts": ["https://projects.propublica.org/nonprofits/search?q=turning+point+usa", "https://www.opensecrets.org/orgs/turning-point-usa/summary?id=D000067746"]
+    },
+    "PragerU": {
+      "type": "501(c)(3) media producer (not a university)",
+      "scale": "~$50M/yr",
+      "focus": "Short-form ideological video at industrial scale; approved as classroom material in several states.",
+      "funding": "Founding funding: fracking billionaires Farris and Dan Wilks.",
+      "receipts": ["https://projects.propublica.org/nonprofits/search?q=prager+university", "https://www.desmog.com/prageru/"]
+    },
+    "Center for Immigration Studies": {
+      "type": "501(c)(3) think tank",
+      "scale": "~$4M/yr",
+      "focus": "Restrictionist immigration statistics laundered into mainstream debate; founded within the Tanton network.",
+      "receipts": ["https://projects.propublica.org/nonprofits/search?q=center+for+immigration+studies", "https://www.splcenter.org/fighting-hate/extremist-files/group/center-immigration-studies"]
+    },
+    "FAIR (Federation for American Immigration Reform)": {
+      "type": "501(c)(3)",
+      "scale": "~$10M/yr",
+      "focus": "Anti-immigration advocacy; Tanton network flagship; historic Pioneer Fund (eugenics) funding.",
+      "receipts": ["https://projects.propublica.org/nonprofits/search?q=federation+for+american+immigration+reform", "https://www.splcenter.org/fighting-hate/extremist-files/group/federation-american-immigration-reform"]
+    },
+    "NumbersUSA": {
+      "type": "501(c)(3)/(c)(4) pair",
+      "scale": "~$10M/yr",
+      "focus": "Grassroots-styled anti-immigration mobilization; Tanton network.",
+      "receipts": ["https://projects.propublica.org/nonprofits/search?q=numbersusa"]
+    },
+    "ICAN (Informed Consent Action Network)": {
+      "type": "501(c)(3)",
+      "scale": "~$10M+/yr",
+      "focus": "Anti-vaccine media (Del Bigtree); majority of historic funding from a single family (Selz).",
+      "receipts": ["https://projects.propublica.org/nonprofits/search?q=informed+consent+action+network"]
+    },
+    "Children's Health Defense": {
+      "type": "501(c)(3)",
+      "scale": "~$15-25M/yr (grew ~10x during COVID)",
+      "focus": "Anti-vaccine litigation and media; founded by RFK Jr., who became HHS Secretary in 2025 — the org's narratives now carry federal force.",
+      "receipts": ["https://projects.propublica.org/nonprofits/search?q=childrens+health+defense"]
+    },
+    "State Policy Network": {
+      "type": "501(c)(3) umbrella for ~60 state-level think tanks",
+      "scale": "~$120M/yr network-wide",
+      "focus": "Makes identical policy narratives appear locally grown in every state simultaneously — institutionalized coordination.",
+      "receipts": ["https://projects.propublica.org/nonprofits/search?q=state+policy+network", "https://www.exposedbycmd.org/spn/"]
+    },
+    "DonorsTrust / Donors Capital Fund": {
+      "type": "Donor-advised fund (the 'dark money ATM')",
+      "scale": "$100M-250M/yr in grants",
+      "focus": "Anonymization layer: donors give here, DonorsTrust regrants to movement orgs, original source vanishes from every downstream 990.",
+      "receipts": ["https://projects.propublica.org/nonprofits/search?q=donors+trust", "https://www.desmog.com/donors-trust/"]
+    },
+    "Bradley Foundation": {
+      "type": "Private foundation (~$1B endowment)",
+      "scale": "~$40-50M/yr in grants",
+      "focus": "Patient capital for the infrastructure: Heritage, election-integrity litigation networks, state think tanks.",
+      "receipts": ["https://projects.propublica.org/nonprofits/search?q=lynde+and+harry+bradley+foundation"]
+    },
+    "Americans for Prosperity": {
+      "type": "501(c)(4) (Koch network flagship)",
+      "scale": "~$100M+/yr in election cycles",
+      "focus": "Field operation + ad spending; the network's donor summits move more money than most parties.",
+      "receipts": ["https://www.opensecrets.org/orgs/americans-for-prosperity/summary?id=D000021829", "https://littlesis.org/org/34954-Americans_for_Prosperity"]
+    },
+    "The 85 Fund / Leonard Leo network": {
+      "type": "501(c)(3)/(c)(4) constellation (85 Fund, Marble Freedom Trust, Concord Fund)",
+      "scale": "Marble Freedom Trust seeded with $1.6B (largest known dark-money gift in US history, Barre Seid, 2021)",
+      "focus": "Judicial confirmations, election litigation, state AG races — narrative campaigns timed to court fights.",
+      "receipts": ["https://projects.propublica.org/nonprofits/search?q=85+fund", "https://projects.propublica.org/nonprofits/search?q=marble+freedom+trust"]
+    },
+    "Media Research Center": {
+      "type": "501(c)(3)",
+      "scale": "~$20M/yr",
+      "focus": "'Media bias' meta-narrative production — the machine that pre-discredits fact-checking itself.",
+      "receipts": ["https://projects.propublica.org/nonprofits/search?q=media+research+center"]
+    },
+    "Moms for Liberty": {
+      "type": "501(c)(4)",
+      "scale": "~$3-8M/yr (rapid growth, opaque donors)",
+      "focus": "School-board narrative insertion; grassroots-styled with major-donor and Heritage-adjacent backing.",
+      "receipts": ["https://projects.propublica.org/nonprofits/search?q=moms+for+liberty"]
+    },
+    "Conservative Partnership Institute": {
+      "type": "501(c)(3)",
+      "scale": "~$45M/yr (post-2020 surge)",
+      "focus": "Staffing and infrastructure hub for election-denial personnel (Mark Meadows, Cleta Mitchell's Election Integrity Network).",
+      "receipts": ["https://projects.propublica.org/nonprofits/search?q=conservative+partnership+institute"]
+    }
+  }
+}

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>TruthStrike Dashboard</title>
+<style>
+  :root {
+    --bg:#fcfcfb; --card:#fff; --ink:#1c2024; --ink-2:#5c6570; --ink-3:#7d858d; --line:#e6e8eb; --track:#eef0f2;
+    --c-threat:#e5484d; --c-social:#f76b15; --c-reward:#8e4ec6; --c-evidence:#0090ff; --c-stakes:#e5a000;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#17191c; --card:#1d2024; --ink:#edeef0; --ink-2:#b0b7bd; --ink-3:#9aa2aa; --line:#2c3238; --track:#2c3238;
+      --c-social:#e35f0a; --c-stakes:#b88500; }
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    font-size:14px; line-height:1.5; max-width:960px; margin:0 auto; padding:32px 20px 80px; }
+  h1 { font-size:22px; } .sub { color:var(--ink-2); margin-bottom:24px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px; margin-bottom:20px; }
+  .tile { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; }
+  .tile .n { font-size:30px; font-weight:800; font-variant-numeric:tabular-nums; }
+  .tile .l { font-size:12px; color:var(--ink-2); margin-top:2px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px; margin-bottom:16px; }
+  .card h2 { font-size:14px; margin-bottom:4px; }
+  .card .d { font-size:12.5px; color:var(--ink-2); margin-bottom:14px; }
+  .bar-row { display:grid; grid-template-columns:190px 1fr 34px; align-items:center; gap:10px; margin:6px 0; }
+  .bar-row .lbl { font-size:12px; font-weight:600; color:var(--ink-2); display:flex; align-items:center; gap:6px;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .bar-row .lbl .dot { width:8px; height:8px; border-radius:50%; flex:none; }
+  .bar-row .val { font-size:12px; font-weight:700; text-align:right; font-variant-numeric:tabular-nums; }
+  .track { height:7px; border-radius:4px; background:var(--track); overflow:hidden; }
+  .fill { height:100%; border-radius:4px; }
+  .legend { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:12px; font-size:12px; color:var(--ink-2); }
+  .legend span { display:inline-flex; align-items:center; gap:5px; }
+  .legend .dot { width:8px; height:8px; border-radius:50%; }
+  .cluster { border:1px solid var(--line); border-radius:10px; padding:14px; margin:10px 0; }
+  .cluster .hd { display:flex; justify-content:space-between; font-size:12.5px; margin-bottom:10px; }
+  .cluster .hd b { font-size:13px; }
+  .cluster .strength { color:var(--ink-3); font-variant-numeric:tabular-nums; }
+  .cascade { position:relative; height:56px; margin:4px 0 2px; }
+  .cascade .axis { position:absolute; left:0; right:0; top:26px; height:2px; background:var(--track); border-radius:1px; }
+  .cascade .stop { position:absolute; top:18px; width:16px; height:16px; border-radius:50%;
+    background:var(--c-threat); border:2px solid var(--card); transform:translateX(-50%); }
+  .cascade .stop-lbl { position:absolute; top:40px; font-size:10.5px; color:var(--ink-2); transform:translateX(-50%);
+    white-space:nowrap; max-width:110px; overflow:hidden; text-overflow:ellipsis; }
+  .cascade .t0 { position:absolute; top:0; font-size:10.5px; color:var(--ink-3); }
+  .snippet { font-size:12px; color:var(--ink-3); font-style:italic; margin-top:8px; }
+  table { width:100%; border-collapse:collapse; font-size:12.5px; }
+  th { text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-3);
+    padding:8px 10px; border-bottom:1px solid var(--line); }
+  td { padding:8px 10px; border-bottom:1px solid var(--line); font-variant-numeric:tabular-nums; }
+  tr:last-child td { border-bottom:none; }
+  .empty { color:var(--ink-3); padding:16px 0; }
+  .mult-up { color:#2b823a; font-weight:700; } .mult-down { color:#e5484d; font-weight:700; }
+  @media (prefers-color-scheme: dark) { .mult-up { color:#46a758; } }
+</style>
+</head>
+<body>
+  <h1>⚡ TruthStrike Intelligence</h1>
+  <p class="sub">Your local field notebook: what your browsing encountered, how it tried to work on you, and how narratives moved. Nothing on this page ever left your device.</p>
+
+  <div class="grid">
+    <div class="tile"><div class="n" id="t-flags">0</div><div class="l">total flags</div></div>
+    <div class="tile"><div class="n" id="t-severe">0</div><div class="l">high + severe</div></div>
+    <div class="tile"><div class="n" id="t-sightings">0</div><div class="l">narrative sightings logged</div></div>
+    <div class="tile"><div class="n" id="t-clusters">0</div><div class="l">coordination clusters</div></div>
+  </div>
+
+  <div class="card">
+    <h2>Techniques encountered</h2>
+    <div class="d">How often each manipulation technique drove a flag. Color marks the pathway; the label carries identity.</div>
+    <div class="legend" id="legend"></div>
+    <div id="tech-bars"><div class="empty">No flags recorded yet.</div></div>
+  </div>
+
+  <div class="card">
+    <h2>Coordination clusters</h2>
+    <div class="d">Near-identical talking points that appeared on ≥3 different domains within 72 hours of each other in <em>your</em> browsing. This is the Sinclair-script / op-ed-blast signature.</div>
+    <div id="clusters"><div class="empty">No coordination detected yet. It shows up faster than you'd hope.</div></div>
+  </div>
+
+  <div class="card">
+    <h2>Your calibration</h2>
+    <div class="d">Every 👍/👎 you give tunes technique weights on-device. Multiplier &gt;1 = you found this technique's flags useful; &lt;1 = the engine quiets it down for you.</div>
+    <div id="calibration"><div class="empty">No feedback given yet.</div></div>
+  </div>
+
+  <div class="card">
+    <h2>Recent flags</h2>
+    <div id="recent"><div class="empty">Nothing yet.</div></div>
+  </div>
+
+<script src="../analysis/taxonomy.js"></script>
+<script src="../analysis/lexicons.js"></script>
+<script src="../analysis/heuristics.js"></script>
+<script src="../analysis/scorer.js"></script>
+<script src="../analysis/feedback.js"></script>
+<script src="../network/fingerprint.js"></script>
+<script src="dashboard.js"></script>
+</body>
+</html>

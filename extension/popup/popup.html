@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>TruthStrike</title>
+<style>
+  :root {
+    --bg: #fcfcfb; --card: #ffffff; --ink: #1c2024; --ink-2: #5c6570; --ink-3: #7d858d;
+    --line: #e6e8eb; --track: #eef0f2;
+    --c-threat: #e5484d; --c-social: #f76b15; --c-reward: #8e4ec6; --c-evidence: #0090ff; --c-stakes: #e5a000;
+    --accent: #1c2024; --accent-ink: #fff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #17191c; --card: #1d2024; --ink: #edeef0; --ink-2: #b0b7bd; --ink-3: #9aa2aa;
+      --line: #2c3238; --track: #2c3238;
+      --c-social: #e35f0a; --c-stakes: #b88500;
+      --accent: #edeef0; --accent-ink: #17191c;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { width: 360px; background: var(--bg); color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 13px; }
+  header { display:flex; align-items:center; justify-content:space-between; padding: 14px 16px 10px; }
+  header h1 { font-size: 15px; letter-spacing: .03em; }
+  header .llm { font-size: 10.5px; color: var(--ink-3); }
+  .tiles { display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; padding: 0 16px; }
+  .tile { background: var(--card); border:1px solid var(--line); border-radius:10px; padding:10px; }
+  .tile .n { font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .tile .l { font-size: 10.5px; color: var(--ink-2); margin-top: 2px; }
+  section { padding: 12px 16px 0; }
+  section h2 { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-3); margin-bottom: 8px; }
+  .bar-row { display:grid; grid-template-columns: 62px 1fr 26px; align-items:center; gap:8px; margin:5px 0; }
+  .bar-row .lbl { font-size: 11.5px; font-weight:600; color: var(--ink-2); }
+  .bar-row .val { font-size: 11.5px; font-weight:700; text-align:right; font-variant-numeric: tabular-nums; }
+  .track { height:6px; border-radius:4px; background:var(--track); overflow:hidden; }
+  .fill { height:100%; border-radius:4px; }
+  .recent { background: var(--card); border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  .catch { display:flex; justify-content:space-between; gap:8px; padding:8px 10px; border-bottom:1px solid var(--line); }
+  .catch:last-child { border-bottom:none; }
+  .catch .d { font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .catch .s { color: var(--ink-3); flex:none; font-variant-numeric: tabular-nums; }
+  .empty { padding: 14px; color: var(--ink-3); text-align:center; }
+  .army { margin-top:8px; padding:9px 10px; border:1px solid var(--c-threat); border-radius:10px; font-size:12px; }
+  .army b { color: var(--c-threat); }
+  .actions { display:flex; gap:8px; padding: 14px 16px; }
+  button { flex:1; padding: 9px 10px; font-size: 12.5px; font-weight:600; border-radius: 8px; cursor:pointer;
+    border:1px solid var(--line); background: var(--card); color: var(--ink); }
+  button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  footer { padding: 0 16px 12px; font-size: 10.5px; color: var(--ink-3); }
+</style>
+</head>
+<body>
+  <header>
+    <h1>⚡ TRUTHSTRIKE</h1>
+    <span class="llm" id="llm-status">checking local model…</span>
+  </header>
+
+  <div class="tiles">
+    <div class="tile"><div class="n" id="t-flags">0</div><div class="l">flags raised</div></div>
+    <div class="tile"><div class="n" id="t-high">0</div><div class="l">high severity</div></div>
+    <div class="tile"><div class="n" id="t-clusters">0</div><div class="l">coordination clusters</div></div>
+  </div>
+
+  <section>
+    <h2>Manipulation pathways seen (your browsing)</h2>
+    <div id="pathways"></div>
+    <div class="army" id="army" hidden></div>
+  </section>
+
+  <section>
+    <h2>Recent flags</h2>
+    <div class="recent" id="recent"><div class="empty">Nothing flagged yet. That’s a good day.</div></div>
+  </section>
+
+  <div class="actions">
+    <button class="primary" id="scan">Scan this page</button>
+    <button id="dashboard">Dashboard</button>
+    <button id="options">Options</button>
+  </div>
+  <footer>All analysis ran on this device. No content, history, or telemetry leaves it.</footer>
+
+<script src="../network/fingerprint.js"></script>
+<script src="popup.js"></script>
+</body>
+</html>

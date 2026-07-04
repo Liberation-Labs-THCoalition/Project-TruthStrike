@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>TruthStrike Options</title>
+<style>
+  :root {
+    --bg:#fcfcfb; --card:#fff; --ink:#1c2024; --ink-2:#5c6570; --ink-3:#7d858d; --line:#e6e8eb;
+    --accent:#1c2024; --accent-ink:#fff; --good:#2b823a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#17191c; --card:#1d2024; --ink:#edeef0; --ink-2:#b0b7bd; --ink-3:#9aa2aa; --line:#2c3238;
+      --accent:#edeef0; --accent-ink:#17191c; --good:#46a758; }
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    font-size:14px; line-height:1.5; max-width:640px; margin:0 auto; padding:32px 20px 60px; }
+  h1 { font-size:20px; margin-bottom:4px; }
+  .sub { color:var(--ink-2); margin-bottom:24px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px; margin-bottom:16px; }
+  .card h2 { font-size:14px; margin-bottom:12px; }
+  .row { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; padding:10px 0; border-bottom:1px solid var(--line); }
+  .row:last-child { border-bottom:none; }
+  .row .t { font-weight:600; } .row .d { color:var(--ink-2); font-size:12.5px; margin-top:2px; max-width:420px; }
+  input[type=text] { width:100%; padding:8px 10px; border:1px solid var(--line); border-radius:8px;
+    background:var(--bg); color:var(--ink); font-size:13px; margin-top:6px; }
+  input[type=checkbox] { width:18px; height:18px; margin-top:3px; }
+  select { padding:6px 8px; border:1px solid var(--line); border-radius:8px; background:var(--bg); color:var(--ink); }
+  button { padding:10px 18px; font-size:14px; font-weight:600; border-radius:8px; cursor:pointer;
+    border:1px solid var(--accent); background:var(--accent); color:var(--accent-ink); }
+  .saved { color:var(--good); font-weight:600; margin-left:12px; opacity:0; transition:opacity .2s; }
+  .saved.on { opacity:1; }
+  .danger { border-color:#e5484d; background:transparent; color:#e5484d; }
+  .status { font-size:12.5px; color:var(--ink-3); margin-top:8px; }
+  .privacy { font-size:12.5px; color:var(--ink-2); border-left:3px solid var(--good); padding-left:12px; margin-top:8px; }
+</style>
+</head>
+<body>
+  <h1>⚡ TruthStrike Options</h1>
+  <p class="sub">Local-first manipulation detection. Every setting here stays in your browser's local storage.</p>
+
+  <div class="card">
+    <h2>Detection</h2>
+    <div class="row">
+      <div><div class="t">Enable TruthStrike</div><div class="d">Master switch.</div></div>
+      <input type="checkbox" id="enabled">
+    </div>
+    <div class="row">
+      <div><div class="t">Auto-scan pages</div><div class="d">Analyze content as it loads. Off = only when you click "Scan this page".</div></div>
+      <input type="checkbox" id="autoScan">
+    </div>
+    <div class="row">
+      <div><div class="t">Flag threshold</div><div class="d">Minimum Manipulation Index before a badge appears.</div></div>
+      <select id="minBand">
+        <option value="25">Elevated (25+) — default</option>
+        <option value="50">High only (50+)</option>
+        <option value="75">Severe only (75+)</option>
+      </select>
+    </div>
+    <div class="row">
+      <div><div class="t">Site ownership chip</div><div class="d">Show "who owns this outlet" once per site per session.</div></div>
+      <input type="checkbox" id="ownerChip">
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Local model (Tier 2)</h2>
+    <div class="row">
+      <div><div class="t">Use a local model when available</div>
+        <div class="d">Sharpens scores and drafts counter-narratives. Chrome's built-in on-device model is used if present; otherwise a local Ollama server. <b>There is no cloud option, by design.</b></div></div>
+      <input type="checkbox" id="llmEnabled">
+    </div>
+    <div class="row">
+      <div style="width:100%"><div class="t">Ollama URL & model</div>
+        <input type="text" id="ollamaUrl" placeholder="http://localhost:11434">
+        <input type="text" id="ollamaModel" placeholder="qwen2.5:1.5b-instruct">
+        <div class="status" id="llmStatus">…</div>
+        <div class="d" style="margin-top:6px">Quick start: install <b>ollama.com</b>, then run <code>ollama pull qwen2.5:1.5b-instruct</code>. ~1 GB, runs on most laptops.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Receipts APIs</h2>
+    <div class="row">
+      <div style="width:100%"><div class="t">FEC API key (optional)</div>
+        <div class="d">Campaign-finance lookups use the public DEMO_KEY (rate-limited). A free key from api.data.gov removes the limit. Queries contain organization names from the public database — never your browsing.</div>
+        <input type="text" id="fecKey" placeholder="DEMO_KEY (default)">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Your data</h2>
+    <p class="privacy">Everything TruthStrike knows lives in this browser: your feedback calibration, flag statistics, and narrative sightings. There is no account, no sync, no telemetry. The buttons below are the complete data-management story.</p>
+    <div class="row" style="margin-top:8px">
+      <div><div class="t">Reset feedback calibration</div><div class="d">Return technique weights to factory defaults.</div></div>
+      <button class="danger" id="resetFeedback">Reset</button>
+    </div>
+    <div class="row">
+      <div><div class="t">Clear all local data</div><div class="d">Stats, sightings, calibration — everything.</div></div>
+      <button class="danger" id="clearAll">Clear</button>
+    </div>
+  </div>
+
+  <button id="save">Save settings</button><span class="saved" id="saved">Saved ✓</span>
+
+<script src="options.js"></script>
+</body>
+</html>

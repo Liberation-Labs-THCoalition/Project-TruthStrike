@@ -1,0 +1,160 @@
+{
+  "_meta": {
+    "description": "Curated counter-narrative library. These are the Tier-1 fallback when no local LLM is available, and the citation backbone when one is. Organized by narrative family, not detection trigger — detection is technique-based; this library is a resource the user chooses to deploy.",
+    "style_rules": [
+      "Calm beats clever. The goal is the onlooker, not the poster.",
+      "Every claim carries a source a normal person can open.",
+      "Acknowledge the legitimate concern under the narrative when one exists.",
+      "Never fabricate precision. '60+ court cases' is checkable; invented percentages are not."
+    ],
+    "as_of": "2025"
+  },
+  "families": [
+    {
+      "id": "election_fraud",
+      "name": "Stolen / rigged election claims",
+      "counters": [
+        "Over 60 court cases challenging the 2020 election were dismissed or ruled against, including by judges appointed by the president making the claims. Courts require evidence; none held up.",
+        "Trump's own DHS called 2020 'the most secure election in American history,' and his Attorney General said the DOJ found no fraud that would change the outcome.",
+        "Fox News paid $787.5 million to settle a defamation suit over these claims — internal messages showed hosts privately calling them false while airing them."
+      ],
+      "sources": [
+        "https://www.cisa.gov/news-events/news/joint-statement-elections-infrastructure-government-coordinating-council-election",
+        "https://www.campaignlegal.org/results-lawsuits-regarding-2020-elections",
+        "https://www.npr.org/2023/04/18/1170339114/fox-news-settles-blockbuster-defamation-lawsuit-with-dominion-voting-systems"
+      ]
+    },
+    {
+      "id": "climate_denial",
+      "name": "Climate denial / delay",
+      "counters": [
+        "Every major scientific body on Earth — every national academy of science, every major meteorological organization — confirms human-caused warming. The 'debate' exists in media, not in the data.",
+        "Exxon's own scientists projected today's warming with startling accuracy in the 1970s-80s; the company then funded public doubt about its own findings (Supran et al., Science, 2023).",
+        "The legitimate concern underneath: energy costs and jobs are real issues. That's an argument about transition policy, not about whether the physics is happening."
+      ],
+      "sources": [
+        "https://climate.nasa.gov/evidence/",
+        "https://www.science.org/doi/10.1126/science.abk0063",
+        "https://www.ipcc.ch/report/ar6/syr/"
+      ]
+    },
+    {
+      "id": "vaccine_misinfo",
+      "name": "Vaccine conspiracy claims",
+      "counters": [
+        "mRNA vaccines cannot alter DNA — mRNA never enters the cell nucleus where DNA lives, and it degrades within days. This is testable, taught-in-textbooks cell biology.",
+        "Billions of doses have been administered under the most intense safety surveillance in medical history; serious adverse events are rare, documented, and publicly tracked (VAERS/V-safe data is open).",
+        "The legitimate concern underneath: pharma companies do have bad incentives and real scandals. That's why safety data is collected by independent systems in dozens of countries that don't share those incentives."
+      ],
+      "sources": [
+        "https://www.cdc.gov/vaccine-safety/about/index.html",
+        "https://www.who.int/news-room/questions-and-answers/item/coronavirus-disease-(covid-19)-vaccines-safety",
+        "https://ourworldindata.org/covid-vaccinations"
+      ]
+    },
+    {
+      "id": "trans_panic",
+      "name": "Anti-trans panic narratives",
+      "counters": [
+        "Every major US medical association — AMA, AAP, APA, Endocrine Society — supports access to gender-affirming care. The 'medical controversy' framing misrepresents where medical consensus actually sits.",
+        "The 'groomer' slur is a pre-verdict: it convicts a group of a crime with no case attached. Actual child-protection work names perpetrators, cases, and charges — check whether the post does.",
+        "Trans people are a fraction of a percent of the population and are far more likely to be victims of violence than perpetrators. Panic requires inverting that ratio; the data won't."
+      ],
+      "sources": [
+        "https://www.ama-assn.org/delivering-care/population-care/advocating-lgbtq-community",
+        "https://publications.aap.org/pediatrics/article/142/4/e20182162/37381",
+        "https://williamsinstitute.law.ucla.edu/publications/ncvs-trans-violent-victimization/"
+      ]
+    },
+    {
+      "id": "immigration_fear",
+      "name": "Invasion / replacement narratives",
+      "counters": [
+        "Immigrants — including undocumented immigrants — commit crimes at lower rates than native-born citizens. This finding replicates across decades of studies, including in Texas's own state data.",
+        "'Great Replacement' is not analysis; it's a named white-nationalist conspiracy theory cited by multiple mass shooters. Language of 'invasion' and 'poisoning blood' has a documented history and a documented body count.",
+        "The legitimate concern underneath: border policy and labor competition are real debates. Real debates use numbers with denominators, not hordes and floods."
+      ],
+      "sources": [
+        "https://www.pnas.org/doi/10.1073/pnas.2014704117",
+        "https://www.cato.org/policy-analysis/criminal-immigrants-texas-illegal-immigrant-conviction-arrest-rates-homicide-sex",
+        "https://www.adl.org/resources/backgrounder/great-replacement-explainer"
+      ]
+    },
+    {
+      "id": "soros_conspiracy",
+      "name": "Soros / globalist puppet-master claims",
+      "counters": [
+        "'One rich Jew secretly controls world events' is the oldest antisemitic template in existence, with the name swapped each generation — Rothschild, then Soros. The structure is the tell.",
+        "Soros's political giving is public and FEC-searchable — and comparable or smaller than that of Musk, Adelson, Uihlein, Thiel, or the Koch network, whose donations rarely earn 'puppet-master' framing.",
+        "Ask the substitution question: would this post work identically with 'Koch' swapped in? If the outrage is name-specific, it's not about money in politics."
+      ],
+      "sources": [
+        "https://www.adl.org/resources/blog/george-soros-and-antisemitism-conspiracy-theories",
+        "https://www.fec.gov/data/receipts/?data_type=processed&contributor_name=soros",
+        "https://www.opensecrets.org/elections-overview/biggest-donors"
+      ]
+    },
+    {
+      "id": "crt_panic",
+      "name": "CRT / 'indoctrination' panic",
+      "counters": [
+        "The strategist who built the CRT panic explained the play on the record: 'We have successfully frozen their brand... to annex the entire range of cultural constructions that are unpopular with Americans' (Christopher Rufo, 2021, public tweets).",
+        "Critical race theory is a graduate-level legal framework; the K-12 'CRT' bans in practice removed books about Ruby Bridges and Rosa Parks. The gap between the label and the banned material is the point.",
+        "Teaching documented history — redlining, the Tulsa massacre — is not shame training. If a curriculum claim scares you, ask to see the actual lesson plan; districts publish them."
+      ],
+      "sources": [
+        "https://www.brookings.edu/articles/why-are-states-banning-critical-race-theory/",
+        "https://pen.org/report/banned-in-the-usa-state-laws-supercharge-book-suppression-in-schools/",
+        "https://www.americanbar.org/groups/crsj/publications/human_rights_magazine_home/civil-rights-reimagining-policing/a-lesson-on-critical-race-theory/"
+      ]
+    },
+    {
+      "id": "welfare_myths",
+      "name": "Welfare queen / lazy poor tropes",
+      "counters": [
+        "Most working-age SNAP recipients who can work, do work — the benefit subsidizes low wages more than idleness. The largest employers of benefit recipients are giant profitable retailers.",
+        "Corporate subsidies, tax expenditures, and bailouts dwarf anti-poverty spending. The 'handout' frame is applied selectively by income of recipient.",
+        "SNAP has among the highest fiscal multipliers of any federal spending (~$1.50+ per $1 in downturns, USDA/Moody's estimates) — food assistance is stimulus, not drain."
+      ],
+      "sources": [
+        "https://www.cbpp.org/research/food-assistance/snap-provides-needed-food-assistance-to-millions-of-people-with-low",
+        "https://www.gao.gov/products/gao-21-45",
+        "https://www.ers.usda.gov/publications/pub-details/?pubid=93529"
+      ]
+    },
+    {
+      "id": "media_distrust_absolute",
+      "name": "'You can't trust ANY source' nihilism",
+      "counters": [
+        "'All media lies' doesn't free you from media — it just hands your feed to whoever says it loudest. Total distrust is not skepticism; it's a different kind of obedience.",
+        "Real verification is boring and available: court filings, 990 tax forms, FEC records, agency datasets. Outlets that cite them can be checked; outlets that say 'do your own research' while citing nothing can't.",
+        "Notice the asymmetry: the source telling you to trust no one always exempts itself."
+      ],
+      "sources": [
+        "https://www.courtlistener.com/",
+        "https://projects.propublica.org/nonprofits/",
+        "https://www.fec.gov/data/"
+      ]
+    }
+  ],
+  "technique_scripts": {
+    "_description": "Generic counter-scripts keyed by detected technique — usable on any topic, including brand-new narratives.",
+    "fear_appeal": "This post wants you scared before it wants you informed. What specific, checkable event is it actually claiming? Strip the adjectives and see what's left.",
+    "urgency": "Nothing real is falsified by waiting twenty minutes to verify it. 'Share before it's too late' is a tell — truth doesn't expire.",
+    "menace_construction": "Invasion, flood, poison, vermin: when humans are described with contamination metaphors, you're being prepared to accept things done to them. That's the metaphor's job. It has a history.",
+    "child_threat_leverage": "Real child-safety reporting names cases, charges, and courts. If 'protect the children' arrives with zero case numbers, the children are a shield, not a subject.",
+    "othering": "Any post that sorts the country into 'real' people and enemies has stopped arguing and started recruiting.",
+    "consensus_faking": "'Everyone knows' is what you say when you can't say 'here's the evidence.' Who, specifically? Counted by whom?",
+    "ridicule_of_dissent": "Calling doubters sheep isn't an argument — it's an inoculation against you checking.",
+    "source_tribalism": "'Only we tell the truth' is the setup for never having to be right again. Claims that are true survive hostile checking; ask why this one needs protection from it.",
+    "insider_knowledge": "'What they don't want you to know' feels good — that feeling is the product being sold. Secret knowledge that arrives via viral post isn't secret; it's marketing.",
+    "identity_flattery": "You're being complimented into agreement. A claim that needs to flatter you first doesn't trust its own evidence.",
+    "savior_framing": "Complex problems don't have one-man solutions; claims that they do are asking for your trust, not your judgment.",
+    "vague_attribution": "'Experts say' — which experts? Where? A named source can be wrong in public; a phantom source can never be wrong at all. That's why it's phantom.",
+    "cherry_stats": "A number without a denominator is a vibe in a suit. Up 300% — from what baseline? Out of how many? Compared to when?",
+    "certainty_inflation": "'Proven beyond all doubt' is how contested claims dress up. Actual findings ship with error bars, methods, and rivals who checked.",
+    "loaded_question": "'Just asking questions' smuggles the claim in the question. Notice you're expected to remember the insinuation, not the answer.",
+    "hedge_laundering": "'Some say' launders an assertion through people who are never named. The author gets the claim's impact without the claim's accountability.",
+    "stakes_inflation": "The bigger the claimed stakes, the more evidence the claim owes you. 'End of America' + zero citations is a debt the post has no intention of paying."
+  }
+}

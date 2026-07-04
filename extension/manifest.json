@@ -1,0 +1,87 @@
+{
+  "manifest_version": 3,
+  "name": "TruthStrike 2.0: Manipulation Detector",
+  "version": "2.0.0",
+  "description": "Local-first manipulation detection. Scores rhetorical technique, shows who owns the outlet and who funds the narrative, and arms you with sourced counter-speech. Nothing leaves your device.",
+
+  "permissions": [
+    "storage",
+    "contextMenus",
+    "activeTab"
+  ],
+
+  "host_permissions": [
+    "https://projects.propublica.org/*",
+    "https://api.open.fec.gov/*",
+    "http://localhost:11434/*"
+  ],
+
+  "background": {
+    "service_worker": "background.js",
+    "scripts": [
+      "analysis/taxonomy.js",
+      "analysis/lexicons.js",
+      "analysis/heuristics.js",
+      "analysis/scorer.js",
+      "analysis/feedback.js",
+      "analysis/llm.js",
+      "money/money.js",
+      "counter/counter.js",
+      "network/fingerprint.js",
+      "background.js"
+    ]
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "analysis/taxonomy.js",
+        "analysis/lexicons.js",
+        "analysis/heuristics.js",
+        "analysis/scorer.js",
+        "analysis/feedback.js",
+        "money/money.js",
+        "counter/counter.js",
+        "network/fingerprint.js",
+        "content/extract.js",
+        "content/overlay.js",
+        "content/main.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "web_accessible_resources": [
+    {
+      "resources": ["data/*.json"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+
+  "options_page": "options/options.html",
+
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "truthstrike@liberationlabs.tech",
+      "strict_min_version": "121.0"
+    }
+  }
+}
