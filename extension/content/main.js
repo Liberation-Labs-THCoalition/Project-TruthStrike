@@ -110,6 +110,16 @@
     await chrome.storage.local.set({ stats: s });
   }
 
+  // Attach matched samples for the "Why" tab (same for a given analysis
+  // regardless of which tier produced the score).
+  function withSamples(scored, analysis) {
+    scored._samples = {};
+    scored.top.forEach(function (t) {
+      scored._samples[t.id] = (analysis.techniques[t.id] || {}).samples || [];
+    });
+    return scored;
+  }
+
   function analyzeCandidate(c) {
     if (processed.has(c.element)) return;
     // Skip if a flagged ancestor already covers this element.
@@ -117,27 +127,31 @@
     processed.add(c.element);
 
     var analysis = TS.analyzeText(c.text, { collectSamples: true });
-    var scored = TS.score(analysis, calibration);
-    // Keep matched samples for the "Why" tab.
-    scored._samples = {};
-    scored.top.forEach(function (t) {
-      scored._samples[t.id] = (analysis.techniques[t.id] || {}).samples || [];
-    });
+    var scored = withSamples(TS.score(analysis, calibration), analysis);
 
     if (scored.index < settings.minBand) return;
 
     c.element.setAttribute('data-ts-flagged', scored.band.key);
-    TS.overlay.attach(c.element, scored, hooksFor(c.text, scored));
+    var host = TS.overlay.attach(c.element, scored, hooksFor(c.text, scored));
     flaggedCount++;
     bumpStats(scored);
     send({ type: 'flag-count', count: flaggedCount });
 
     if (scored.index >= 50) {
       recordSighting(c.text, scored);
-      // Tier 2: ask background to refine with a local model (fire-and-forget;
-      // the badge already stands on heuristic evidence).
+      // Tier 2: ask background to refine with a local model. The heuristic
+      // badge already stands on its own; if the model is reachable we blend
+      // its judgment in and, if that moves the band or score, swap the badge.
       if (settings.llm.enabled) {
-        send({ type: 'tier2-analyze', text: c.text.slice(0, 6000) });
+        send({ type: 'tier2-analyze', text: c.text.slice(0, 6000) }).then(function (llmJudgment) {
+          if (!llmJudgment) return;
+          var scored2 = withSamples(TS.score(analysis, calibration, llmJudgment), analysis);
+          if (scored2.index === scored.index && scored2.band.key === scored.band.key) return;
+          host.remove();
+          c.element.setAttribute('data-ts-flagged', scored2.band.key);
+          host = TS.overlay.attach(c.element, scored2, hooksFor(c.text, scored2));
+          bumpStats(scored2);
+        });
       }
     }
   }

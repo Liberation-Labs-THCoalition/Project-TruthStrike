@@ -19,7 +19,7 @@ no telemetry, no build step — the code you can read is the code that runs.
 - **Scores a spectrum, never a verdict.** 0–100 Manipulation Index with
   confidence, per-pathway breakdown, and plain-language explanations of every
   matched technique. Annotates; never hides or dims content.
-- **Follow the Money.** Who owns this outlet (48-domain database with
+- **Follow the Money.** Who owns this outlet (52-domain database with
   receipts links), who funds this narrative (22 influence orgs), and live
   IRS 990 / FEC lookups — fired only when you click, queried only with
   public org names.
@@ -44,6 +44,16 @@ pick any file in `extension/`.
 install [Ollama](https://ollama.com), then `ollama pull qwen2.5:1.5b-instruct`
 (~1 GB). TruthStrike finds it automatically. Chrome's built-in on-device
 model is used if present. There is no cloud option — by design.
+
+## Packaging a signed-release zip
+
+`scripts/package.sh` builds a reproducible `truthstrike-extension-vX.Y.Z.zip`
+from `extension/` for upload to the Chrome Web Store / AMO (excludes tests,
+server, docs, legacy, and dev files — only what ships to users):
+
+```bash
+./scripts/package.sh
+```
 
 ## Verify it yourself
 

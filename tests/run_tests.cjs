@@ -67,6 +67,17 @@ const calOk = damped.index < base.index;
 console.log(`${calOk ? '✓' : '✗'} calibration lowers score: ${base.index} → ${damped.index}`);
 calOk ? pass++ : fail++;
 
+// ── Tier-2 LLM blend (content/main.js re-scores with this on tier2-analyze) ─
+const blandTechniqueId = 'fear_appeal';
+const blandBase = TS.assess(fixtures[5].text); // bland product review, low score
+const llmBoost = TS.score(TS.analyzeText(fixtures[5].text), {}, {
+  index: 80, techniques: [blandTechniqueId]
+});
+const llmOk = llmBoost.llmUsed === true && llmBoost.index > blandBase.index &&
+  llmBoost.techniques[blandTechniqueId] >= 55;
+console.log(`${llmOk ? '✓' : '✗'} llm blend: heuristic-only ${blandBase.index} → blended ${llmBoost.index}, llmUsed=${llmBoost.llmUsed}`);
+llmOk ? pass++ : fail++;
+
 // ── Money module ────────────────────────────────────────────────────────────
 require(path.join(__dirname, '..', 'extension', 'money', 'money.js'));
 TS.money.init(
