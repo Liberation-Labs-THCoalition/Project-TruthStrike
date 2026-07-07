@@ -27,7 +27,6 @@ desktop.ini
 # Project specific
 api/truthstrike.db
 dashboard/data/
-extension/icons/*.png
 reports/
 exports/
 
